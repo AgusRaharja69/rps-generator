@@ -4,6 +4,7 @@ import datetime
 import time
 import locale
 from collections import Counter
+import re
 
 # Set locale to Indonesian
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
@@ -32,10 +33,37 @@ list_subcpmk = sheet_input.worksheet("4. List SubCPMK")
 list_dosen = sheet_input.worksheet("5. List Dosen")
 temp_rps_in = sheet_input.worksheet("Template RPS")
 temp_kontrak_in = sheet_input.worksheet("Template Kontrak")
-temp_rubrik_in = sheet_input.worksheet("Template Rubrik")
+temp_rubrik_H1_in = sheet_input.worksheet("Template Rubrik H1")
+temp_rubrik_H2_in = sheet_input.worksheet("Template Rubrik H2")
+temp_rubrik_H3_in = sheet_input.worksheet("Template Rubrik H3")
+temp_rubrik_A1_in = sheet_input.worksheet("Template Rubrik A1")
+temp_rubrik_A2_in = sheet_input.worksheet("Template Rubrik A2")
+temp_rubrik_A3_in = sheet_input.worksheet("Template Rubrik A3")
+temp_rubrik_SP1_in = sheet_input.worksheet("Template Rubrik SP1")
 temp_rtm_in = sheet_input.worksheet("Template RTM")
 temp_porto_in = sheet_input.worksheet("Template Portofolio Penilaian")
 temp_nilai_in = sheet_input.worksheet("Template Nilai Mahasiswa")
+
+# --- dictionary lookup cepat ---
+TEMPLATE_MAP = {
+    "H1": temp_rubrik_H1_in,
+    "H2": temp_rubrik_H2_in,
+    "H3": temp_rubrik_H3_in,
+    "A1": temp_rubrik_A1_in,
+    "A2": temp_rubrik_A2_in,
+    "A3": temp_rubrik_A3_in,
+    "SP1": temp_rubrik_SP1_in,
+}
+
+PENUGASAN_MAP = {
+    "H1": "Tugas Pemahaman Materi",
+    "H2": "UTS/UAS",
+    "H3": "Tugas Proposal",
+    "A1": "Tugas Makalah",
+    "A2": "Penugasan  PBL",
+    "A3": "Laporan Hasil Capstone Project",
+    "SP1": "Presentasi Hasil",
+}
 
 # Get all data from the worksheets
 data_dosen = list_dosen.get_all_values()
@@ -78,7 +106,8 @@ for row in data_matkul[1:]:  # Skip header
             "JUMLAH": row[9],
             "KODE DOKUMEN RPS": row[10],
             "KODE DOKUMEN RTM": row[11],
-            "KODE DOKUMEN KONTRAK": row[12]
+            "KODE DOKUMEN KONTRAK": row[12],
+            "KODE DOKUMEN RUBRIK": row[13]
         }
         break
 
@@ -117,6 +146,7 @@ else:
                 if subcpmk not in subcpmk_list:
                     subcpmk_list.append(subcpmk)
 
+    print(subcpmk_set)
     # Display the arrays
     print("CPL (tanpa duplikat, urutan asli):", cpl_list)
     print("CPMK (tanpa duplikat, urutan asli):", cpmk_list)
@@ -491,7 +521,7 @@ else:
 
                         # Create numbered kriteria
                         number = criteria_counter[criteria_type]
-                        numbered_kriteria_item = f"{kriteria_item.split(':', 1)[0]} {number}: {kriteria_item.split(':', 1)[1].strip()} [Rubrik Holistik H-1]" if ':' in kriteria_item else f"{kriteria_item} {number} [Rubrik Holistik H-1]"
+                        numbered_kriteria_item = f"{kriteria_item.split(':', 1)[0]} {number}: {kriteria_item.split(':', 1)[1].strip()}"
                     else:
                         numbered_kriteria_item = kriteria_item  # No numbering for other types
 
@@ -678,31 +708,191 @@ else:
             worksheet.update(f'G{kordinator_row}', [[data_dosen[4][0]]])
             worksheet.update(f'G{kordinator_row+1}', [["NIK. " + data_dosen[4][1]]])
 
-    def update_rubrik_sheet(subcpmk_list):
-        # Duplicate Template RPS and rename to RPS
-        new_rubrik_worksheet = sheet_input.duplicate_sheet(temp_rubrik_in.id, new_sheet_name="RUBRIK")
-        worksheet = sheet_input.worksheet("RUBRIK")
-        time.sleep(1)
+    def update_rubrik_sheet(data, kriteria, subcpmk_set, cpl_set, dosen):
+        # ――― 1. Siapkan lookup & konstanta ―――
+        ALLOWED = set(TEMPLATE_MAP)  # {'H1', …, 'SP1'}
+        START_SUB, START_CPL = 15, 20
+        sheet_counter = 1
+        sub_to_cpl = dict(zip(subcpmk_set, cpl_set))  # SUB‑→ CPL
 
-        # Update SubCPMK with looping (start 5 rows after CPMK)
-        subcpmk_start_row = 3
-        if subcpmk_list:
-            # Insert rows for SubCPMK data
-            if len(subcpmk_list) > 0:
-                worksheet.insert_rows([[None] * worksheet.col_count] * len(subcpmk_list), subcpmk_start_row)
-                time.sleep(1)  # Delay to respect quota
-            
-            # Write SubCPMK list
-            worksheet.update(f'B{subcpmk_start_row-1}:B{subcpmk_start_row + len(subcpmk_list)}', [[item] for item in subcpmk_list])
-            time.sleep(1)  # Delay to respect quota
+        rows_by_code = {code: [] for code in ALLOWED}
+        for i, text in enumerate(kriteria):
+            m = re.search(r"\[(.*?)\]", text)
+            if m and (lbl := m.group(1).strip()) in ALLOWED:
+                rows_by_code[lbl].append(i)
+
+        print(rows_by_code)
+
+        for code in ALLOWED:
+            idx_rows = rows_by_code[code]
+            if not idx_rows:
+                continue
+
+            # Ambil sub-CPMK dan CPL unik
+            sub_lines = [subcpmk_mingguan[i] for i in idx_rows]
+            sub_lines_nondup = list(dict.fromkeys(sub_lines))  # Keep order
+            cpl_lines = [sub_to_cpl.get(sub, "") for sub in sub_lines]
+            cpl_lines_nondup = list(dict.fromkeys(cpl_lines))
+
+            # Ambil deskripsi Sub-CPMK
+            sub_desc = []
+            for sub_code in sub_lines_nondup:
+                for row in data_subcpmk[1:]:  # Skip header
+                    if row[6] == sub_code:
+                        sub_desc.append(row[7] if len(row) > 7 else "")
+                        break
+
+            # Ambil deskripsi CPL
+            cpl_desc = []
+            for cpl_code in cpl_lines_nondup:
+                for row in data_cpl[1:]:  # Skip header
+                    if row[0] == cpl_code:
+                        cpl_desc.append(row[1] if len(row) > 1 else "")
+                        break
+
+            # Skip jika kosong
+            if not sub_lines_nondup and not cpl_lines_nondup:
+                print(f"[SKIP] RUB {sheet_counter} ({code}) tidak memiliki konten, dilewati.")
+                continue
+
+            # Buat sheet rubrik
+            new_name = f"RUB {sheet_counter} ({code})"
+            template_ws = TEMPLATE_MAP[code]
+            penugasan = PENUGASAN_MAP[code]
+            sheet_input.duplicate_sheet(template_ws.id, new_sheet_name=new_name)
+            ws = sheet_input.worksheet(new_name)
+            time.sleep(1)
+
+            # Isi header
+            ws.update('K3', [[data['KODE DOKUMEN RUBRIK']]]); time.sleep(1)
+            ws.update('C5', [[data['MATA KULIAH']]]);         time.sleep(1)
+            ws.update('C6', [[data['KODE MK']]]);             time.sleep(1)
+            ws.update('C7', [[data['SKS']]]);                 time.sleep(1)
+            ws.update('C8', [[data['SEMESTER']]]);            time.sleep(1)
+            ws.update('C9', [[dosen]]);                       time.sleep(1)
+            ws.update('C12', [[penugasan]]);                  time.sleep(1)
+
+            # Insert rows untuk Sub-CPMK
+            if len(sub_lines_nondup) > 1:
+                ws.insert_rows([[None] * ws.col_count] * (len(sub_lines_nondup) - 1), START_SUB + 1)
+                time.sleep(1)
+
+            for i in range(len(sub_lines_nondup)):
+                ws.merge_cells(f'C{START_SUB+i}:D{START_SUB+i}')
+                time.sleep(1)
+                ws.merge_cells(f'E{START_SUB+i}:L{START_SUB+i}')
+                time.sleep(1)
+
+            ws.update(f'C{START_SUB}:C{START_SUB + len(sub_lines_nondup) - 1}',
+                    [[code] for code in sub_lines_nondup])
+            time.sleep(1)
+            ws.update(f'E{START_SUB}:E{START_SUB + len(sub_desc) - 1}',
+                    [[desc] for desc in sub_desc])
+            time.sleep(1)
+
+            # Insert rows untuk CPL
+            cpl_start = START_SUB + len(sub_lines_nondup) + 4
+            if len(cpl_lines_nondup) > 1:
+                ws.insert_rows([[None] * ws.col_count] * (len(cpl_lines_nondup) - 1), cpl_start)
+                time.sleep(1)
+
+            for i in range(len(cpl_lines_nondup)):
+                ws.merge_cells(f'A{cpl_start+i}:C{cpl_start+i}')
+                time.sleep(1)
+                ws.merge_cells(f'D{cpl_start+i}:J{cpl_start+i}')
+                time.sleep(1)
+                ws.merge_cells(f'K{cpl_start+i}:L{cpl_start+i}')
+                time.sleep(1)
+
+            # Buat mapping SubCPMK → CPL (kebalikan)
+            sub_set_label = set(sub_lines_nondup)          # Sub‑CPMK unik utk label ini
+            cpl_to_subs   = {cpl: [] for cpl in cpl_lines_nondup}
+
+            for sub in sub_set_label:                      # loop hanya sub yg dipakai
+                cpl = sub_to_cpl.get(sub)
+                if cpl in cpl_to_subs:                     # pastikan CPL dipakai juga
+                    cpl_to_subs[cpl].append(sub)
+
+            # Update ke sheet
+            ws.update(f'A{cpl_start}:A{cpl_start + len(cpl_lines_nondup) - 1}',
+                    [[code] for code in cpl_lines_nondup])
+            time.sleep(1)
+            ws.update(f'D{cpl_start}:D{cpl_start + len(cpl_desc) - 1}',
+                    [[desc] for desc in cpl_desc])
+            time.sleep(1)
+            ws.update(f'K{cpl_start}:K{cpl_start + len(cpl_lines_nondup) - 1}',
+                    [[", ".join(cpl_to_subs[cpl])] for cpl in cpl_lines_nondup])
+            time.sleep(1)
+            sheet_counter += 1
     
-    def update_rtm_sheet(data, kriteria):
+    def update_rpm_sheets(data, kriteria, dosen):
+        kategori_keys = ["Tugas", "Kuis", "Evaluasi UTS", "Evaluasi UAS"]
+        kategori_map  = {key: {"label": [], "row": []} for key in kategori_keys}
+
+        for idx, item in enumerate(kriteria):
+            for key in kategori_keys:
+                if key in item:
+                    kategori_map[key]["label"].append(item)
+                    kategori_map[key]["row"].append(idx)
+                    break   # sebuah kriteria hanya boleh masuk satu kategori
+
+        # ------------------ 2. Duplicated & isi sheet ----------------------
+        sheet_counter = 1  # penomoran global RPM 1, 2, 3, ...
+
+        for key in kategori_keys:               # urutan Tugas → Kuis → UTS → UAS
+            labels = kategori_map[key]["label"]
+            rows   = kategori_map[key]["row"]
+
+            for i, item in enumerate(labels):
+                # a) duplikat template RPM
+                safe_item = item.split(":", 1)[0].strip()
+                new_name = f"RPM {sheet_counter} ({safe_item})"
+                new_ws = sheet_input.duplicate_sheet(
+                    temp_rtm_in.id,          # atau temp_rtm_in.id jika sama
+                    new_sheet_name=new_name
+                )
+                worksheet = sheet_input.worksheet(new_name)
+                time.sleep(1)
+
+                row_idx = rows[i]             # indeks sejajar ke list global
+
+                # b) ISIAN HEADER
+                worksheet.update('H3', [[data.get('KODE DOKUMEN RTM', '')]])
+                time.sleep(1)
+
+                worksheet.update('C5', [[data['MATA KULIAH']]]);  time.sleep(1)
+                worksheet.update('C6', [[data['KODE MK']]]);      time.sleep(1)
+                worksheet.update('E6', [[data['SKS']]]);          time.sleep(1)
+                worksheet.update('G6', [[data['SEMESTER']]]);     time.sleep(1)
+                worksheet.update('C7', [[dosen]]);                time.sleep(1)
+
+                # c) ISIAN RUBRIK SPESIFIK
+                worksheet.update('A12', [[item]]);                                time.sleep(1)
+                worksheet.update('A14', [[subcpmk_mingguan_description[row_idx]]]);time.sleep(1)
+                worksheet.update('A17', [[numbered_indikator[row_idx]]]);          time.sleep(1)
+                worksheet.update('A25', [[f"Indikator: {numbered_indikator[row_idx]}"]]); time.sleep(1)
+                worksheet.update('A27', [[f"Bobot Penilaian : {bobot[row_idx]} % dari total 100% penilaian mata kuliah"]]); time.sleep(1)
+                worksheet.update('A30', [[f"Minggu ke-{minggu_ke[row_idx]}"]]);    time.sleep(1)
+
+                # d) ISIAN PUSTAKA (jika ada)
+                if numbered_pustaka:
+                    worksheet.insert_rows([[None]*worksheet.col_count]*len(numbered_pustaka), 35)
+                    time.sleep(1)
+                    for p in range(len(numbered_pustaka)+1):
+                        worksheet.merge_cells(f'A{34+p}:H{34+p}')
+                    worksheet.update(f'A34:A{34+len(numbered_pustaka)-1}',
+                                    [[ref] for ref in numbered_pustaka])
+                    time.sleep(1)
+
+                sheet_counter += 1  # naikkan nomor RPM berikutnya
+
+    def update_rtm_sheet(data, kriteria, dosen):
         kriteria_tugas = [item for item in kriteria if "Tugas" in item]
         row_tugas = [i for i, item in enumerate(kriteria) if "Tugas" in item]
         print (kriteria_tugas)
         print(row_tugas)
         for i in range(len(kriteria_tugas)) :
-            new_rubrik_worksheet = sheet_input.duplicate_sheet(temp_rtm_in.id, new_sheet_name=f"RTM {i+1}")
+            new_rubrik_worksheet = sheet_input.duplicate_sheet(temp_rtm_in.id, new_sheet_name=f"RPM {i+1}")
             worksheet = sheet_input.worksheet(f"RTM {i+1}")
             time.sleep(1)
 
@@ -827,8 +1017,7 @@ else:
                 time.sleep(1)
                 worksheet.update(f'J{row_start}', [[percent_formula]], value_input_option='USER_ENTERED')
                 time.sleep(1)
-        
-        
+
     def col_index_to_letter(n):
         """Convert column index (1-based) to letter (e.g., 4 -> D)."""
         result = ''
@@ -1069,8 +1258,9 @@ else:
     # Call the update function
     update_rps_sheet(matkul_data, cpl_list, cpmk_list, subcpmk_list, selected_dosen)
     update_kontrak_sheet(matkul_data, cpl_list, subcpmk_list, selected_dosen)
-    update_rubrik_sheet(subcpmk_list)
-    update_rtm_sheet(matkul_data, numbered_kriteria)
+    update_rubrik_sheet(matkul_data, numbered_kriteria, subcpmk_set, cpl_set, selected_dosen)
+    # update_rtm_sheet(matkul_data, numbered_kriteria, selected_dosen)
+    update_rpm_sheets(matkul_data, numbered_kriteria, selected_dosen)
     update_porto_sheet(cpl_list, cpl_set, cpmk_set, subcpmk_set)
     update_nilai_sheet(matkul_data, selected_dosen, cpl_list, cpmk_list, subcpmk_list, cpl_sorted, cpmk_sorted, subcpmk_sorted, bentuk_sorted, bobot_sorted)
 
