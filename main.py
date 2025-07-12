@@ -5,7 +5,17 @@ import time
 import locale
 from collections import Counter
 import re
+from google.colab import files
 
+# Upload credentials.json
+uploaded = files.upload()
+
+# Try setting locale to Indonesian
+try:
+    locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
+except locale.Error:
+    print("Locale 'id_ID.UTF-8' not available. Using default.")
+    
 # Set locale to Indonesian
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
