@@ -15,7 +15,7 @@ try:
     locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 except locale.Error:
     print("Locale 'id_ID.UTF-8' not available. Using default.")
-    
+
 # Set locale to Indonesian
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
@@ -188,27 +188,27 @@ else:
         worksheet = sheet_input.worksheet("RPS")
         # Update basic course data       
         worksheet.update('C6', [[data['KODE MK']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('A6', [[data['MATA KULIAH']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('J3', [[data['KODE DOKUMEN RPS']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('E6', [[data['KATEGORI']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('F6', [[data['SKS']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('I6', [[data['SEMESTER']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('J6', [[datetime.datetime.now().strftime('%d %B %Y')]])  # Tanggal penetapan
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('F8', [[data['TEORI'] or '']])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('G8', [[data['PRAKTIKUM'] or '']])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('H8', [[data['PRAKTIK'] or '']])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('C10', [[dosen]])  
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
 
         # Update CPL with looping
         cpl_start_row = 12  # Starting row for CPL
@@ -216,14 +216,14 @@ else:
             # Insert rows for CPL data
             if len(cpl_list) > 0:
                 worksheet.insert_rows([[None] * worksheet.col_count] * len(cpl_list), cpl_start_row)  # Insert rows at the specified row
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Merge cells from C to J for each inserted row
             for i in range(len(cpl_list)):
                 worksheet.merge_cells(f'C{cpl_start_row + i}:J{cpl_start_row + i}')
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Write CPL list starting from the next row
             worksheet.update(f'B{cpl_start_row}:B{cpl_start_row + len(cpl_list)}', [[item] for item in cpl_list])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             # Get CPL descriptions from data_cpl
             cpl_list_description = []
             for cpl_code in cpl_list:
@@ -233,7 +233,7 @@ else:
                         break
             # Write CPL descriptions to column C
             worksheet.update(f'C{cpl_start_row}:C{cpl_start_row + len(cpl_list)}', [[item] for item in cpl_list_description])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
         # Update CPMK with looping (start 4 rows after CPL)
         cpmk_start_row = cpl_start_row + len(cpmk_list) + 1
@@ -241,14 +241,14 @@ else:
             # Insert rows for CPMK data
             if len(cpmk_list) > 0:
                 worksheet.insert_rows([[None] * worksheet.col_count] * len(cpmk_list), cpmk_start_row)
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Merge cells from C to J for each inserted row
             for i in range(len(cpmk_list)):
                 worksheet.merge_cells(f'C{cpmk_start_row + i}:J{cpmk_start_row + i}')
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Write CPMK list
             worksheet.update(f'B{cpmk_start_row}:B{cpmk_start_row + len(cpmk_list)}', [[item] for item in cpmk_list])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             # Get CPMK descriptions from data_cpmk
             cpmk_list_description = []
             for cpmk_code in cpmk_list:
@@ -258,7 +258,7 @@ else:
                         break
             # Write CPMK descriptions to column C
             worksheet.update(f'C{cpmk_start_row}:C{cpmk_start_row + len(cpmk_list)}', [[item] for item in cpmk_list_description])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
         # Update SubCPMK with looping (start 5 rows after CPMK)
         subcpmk_start_row = cpmk_start_row + len(cpmk_list) + 2
@@ -266,14 +266,14 @@ else:
             # Insert rows for SubCPMK data
             if len(subcpmk_list) > 0:
                 worksheet.insert_rows([[None] * worksheet.col_count] * len(subcpmk_list), subcpmk_start_row)
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Merge cells from C to J for each inserted row
             for i in range(len(subcpmk_list)):
                 worksheet.merge_cells(f'C{subcpmk_start_row + i}:J{subcpmk_start_row + i}')
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Write SubCPMK list
             worksheet.update(f'B{subcpmk_start_row}:B{subcpmk_start_row + len(subcpmk_list)}', [[item] for item in subcpmk_list])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             # Get SubCPMK descriptions from data_subcpmk
             subcpmk_list_description = []
             for subcpmk_code in subcpmk_list:
@@ -283,7 +283,7 @@ else:
                         break
             # Write SubCPMK descriptions to column C
             worksheet.update(f'C{subcpmk_start_row}:C{subcpmk_start_row + len(subcpmk_list)}', [[item] for item in subcpmk_list_description])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
         # Get matkul data from the sheet with matkul name
         try:
@@ -333,15 +333,15 @@ else:
             # Insert rows for SubCPMK data
             if len(subcpmk_list) > 0:
                 worksheet.insert_rows([[None] * worksheet.col_count] * len(subcpmk_list), korelasi_start_row)
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Write SubCPMK list in column B
             worksheet.update(f'B{korelasi_start_row + 1}:B{korelasi_start_row + len(subcpmk_list) + 1}', [[item] for item in subcpmk_list])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             # Write CPL list horizontally from C to J in the same row
             cpl_to_write = cpl_list[:8]  # Take up to 8 elements for C:J
             if cpl_to_write:
                 worksheet.update(f'C{korelasi_start_row}:J{korelasi_start_row}', [cpl_to_write])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             # Update korelasi with values
             for row_number in range(len(subcpmk_list)):
@@ -358,7 +358,7 @@ else:
                             if col_offset < 8:  # Ensure within C:J range
                                 cell = gspread.utils.rowcol_to_a1(target_row, 3 + col_offset)  # 3 = C
                                 worksheet.update(cell, [[value_korelasi]])
-                                time.sleep(1)  # Delay to respect quota
+                                time.sleep(2)  # Delay to respect quota
 
             # Add SUM formulas with correct format
             if subcpmk_list:  # Ensure there are rows to sum
@@ -366,21 +366,21 @@ else:
                 sum_row = target_row + 2
                 if sum_row > korelasi_start_row + 1:  # Ensure there are rows to sum
                     worksheet.update(f'C{sum_row}', [[f'=SUM(C{korelasi_start_row+1}:C{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'D{sum_row}', [[f'=SUM(D{korelasi_start_row+1}:D{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'E{sum_row}', [[f'=SUM(E{korelasi_start_row+1}:E{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'F{sum_row}', [[f'=SUM(F{korelasi_start_row+1}:F{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'G{sum_row}', [[f'=SUM(G{korelasi_start_row+1}:G{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'H{sum_row}', [[f'=SUM(H{korelasi_start_row+1}:H{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'I{sum_row}', [[f'=SUM(I{korelasi_start_row+1}:I{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                     worksheet.update(f'J{sum_row}', [[f'=SUM(J{korelasi_start_row+1}:J{target_row})']], value_input_option='USER_ENTERED')
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
             # Add Deskripsi Matkul
             materi_tanpa_uts_uas = []            
             numbered_materi = []
@@ -396,7 +396,7 @@ else:
                 # Add list of materi                
                 if len(numbered_materi_tanpa_uts_uas) > 0:
                     worksheet.insert_rows([[None] * worksheet.col_count] * len(numbered_materi_tanpa_uts_uas), materi_row+1)
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
 
                 # Buat numbered_materi dengan penomoran, skip "Evaluasi UTS" dan "Evaluasi UAS"
                 for i, item in enumerate(materi):
@@ -407,49 +407,49 @@ else:
 
                 deskripsi_matkul = "Mata kuliah " + matkul_data["MATA KULIAH"] + " membahas konsep teoritis, metode, dan implementasi mengenai materi seperti " + ", ".join(materi_tanpa_uts_uas)
                 worksheet.update(f'B{deskripsi_row}', [[deskripsi_matkul]])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
                 worksheet.update(f'B{materi_row}:B{materi_row + len(numbered_materi_tanpa_uts_uas) - 1}', [[item] for item in numbered_materi_tanpa_uts_uas])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             pustaka_row = materi_row + len(numbered_materi_tanpa_uts_uas) + 2
             if pustaka:
                 # Add list of materi                
                 if len(pustaka) > 0:
                     worksheet.insert_rows([[None] * worksheet.col_count] * len(pustaka), pustaka_row+1)
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                 numbered_pustaka = [f"{i+1}. {item}" for i, item in enumerate(pustaka)]
                 worksheet.update(f'B{pustaka_row}:B{pustaka_row + len(pustaka) - 1}', [[item] for item in numbered_pustaka])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             
             team_teaching_row = pustaka_row + len(pustaka) + 2
             if team_teaching:               
                 if len(team_teaching) > 0:
                     worksheet.insert_rows([[None] * worksheet.col_count] * len(team_teaching), team_teaching_row+1)
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                 numbered_team = [f"{i+1}. {item}" for i, item in enumerate(team_teaching)]
                 worksheet.update(f'B{team_teaching_row}:B{team_teaching_row + len(team_teaching) - 1}', [[item] for item in numbered_team])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             matkul_syarat_row = team_teaching_row + len(team_teaching) + 2
             if matkul_syarat:
                 if len(matkul_syarat) > 0:
                     worksheet.insert_rows([[None] * worksheet.col_count] * len(matkul_syarat), matkul_syarat_row+1)
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                 worksheet.update(f'B{matkul_syarat_row}:B{matkul_syarat_row + len(matkul_syarat) - 1}', [[item] for item in matkul_syarat])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             mingguan_row = matkul_syarat_row + len(matkul_syarat) + 7
             if minggu_ke:
                 if len(minggu_ke) > 0:
                     worksheet.insert_rows([[None] * worksheet.col_count] * (len(minggu_ke)-2), mingguan_row)
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                 worksheet.update(f'A{mingguan_row-1}:A{mingguan_row + len(minggu_ke) - 2}', [[item] for item in minggu_ke])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             
             if subcpmk_mingguan:
                 worksheet.update(f'B{mingguan_row-1}:D{mingguan_row + len(subcpmk_mingguan) - 2}', [[item] for item in subcpmk_mingguan])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
                 # Get SubCPMK descriptions from data_subcpmk                
                 for subcpmk_code in subcpmk_mingguan:
@@ -470,7 +470,7 @@ else:
 
                 # Write SubCPMK descriptions to column C
                 worksheet.update(f'C{mingguan_row-1}:C{mingguan_row + len(subcpmk_mingguan) - 2}', [[item] for item in subcpmk_mingguan_description])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             # Create a modified version of subcpmk_mingguan to handle UTS/UAS
             subcpmk_mingguan_modified = subcpmk_mingguan.copy()
@@ -512,7 +512,7 @@ else:
 
                 # Write numbered indikator to column D (adjust column as needed)
                 worksheet.update(f'D{mingguan_row-1}:D{mingguan_row + len(indikator) - 2}', [[item] for item in numbered_indikator])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             
             if kriteria:                
                 criteria_counter = {}  # To track numbering for Diskusi, Kuis, Tugas
@@ -550,17 +550,17 @@ else:
 
                 # Write numbered kriteria to column E
                 worksheet.update(f'E{mingguan_row-1}:E{mingguan_row + len(kriteria) - 2}', [[item] for item in numbered_kriteria])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
                 # Write content to column F
                 worksheet.update(f'F{mingguan_row-1}:F{mingguan_row + len(kriteria) - 2}', [[item] for item in column_f_content])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             if materi:
                 materi_mingguan_numbered = []
                 for i in range(len(materi)):
                     worksheet.merge_cells(f'H{mingguan_row-1 + i}:I{mingguan_row-1 + i}')
-                    time.sleep(1)
+                    time.sleep(2)
 
                 # Create a dictionary to map items to their assigned numbers
                 number_assignments = {}
@@ -582,15 +582,15 @@ else:
 
                 # Update the worksheet
                 worksheet.update(f'H{mingguan_row-1}:H{mingguan_row + len(materi) - 2}', [[item] for item in materi_mingguan_numbered])
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
 
             if bobot:
                 if len(bobot) > 0:
                     worksheet.update(f'J{mingguan_row-1}:J{mingguan_row + len(bobot) - 2}', [[item/100] for item in bobot])
-                    time.sleep(1)  # Delay to respect quota
+                    time.sleep(2)  # Delay to respect quota
                 
                 worksheet.update(f'J{mingguan_row + len(bobot) - 1}', [[f'=SUM(J{mingguan_row-1}:J{mingguan_row + len(bobot) - 2})']], value_input_option='USER_ENTERED')
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
         
         # Combine UTS and UAS rows into a set for unique rows
         grey_rows = set(uts_row + uas_row) if (uts_row is not None and uas_row is not None) else set()
@@ -624,7 +624,7 @@ else:
             if requests:
                 body = {"requests": requests}
                 worksheet.spreadsheet.batch_update(body)
-                time.sleep(1)  # Delay to respect quota after batch update
+                time.sleep(2)  # Delay to respect quota after batch update
                     
     # def update_ktrak_sheet(worksheet, data, dosen):
     def update_kontrak_sheet(data, cpl_list, subcpmk_list, dosen):
@@ -633,41 +633,41 @@ else:
         worksheet = sheet_input.worksheet("KONTRAK")
 
         worksheet.update('I6', [[data['KODE DOKUMEN KONTRAK'] or '']])
-        time.sleep(1)
+        time.sleep(2)
 
         # Update basic course data 
         worksheet.update('A6', [[data['MATA KULIAH']]])
-        time.sleep(1)  # Delay to respect quota      
+        time.sleep(2)  # Delay to respect quota      
         worksheet.update('D6', [[data['KODE MK']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('E6', [[data['KATEGORI']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('F6', [[data['SKS']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('H6', [[data['SEMESTER']]])
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
 
         worksheet.update('A8', [[dosen]])  
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('E8', [kelas])  
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('F8', [jumlah_mahasiswa])  
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('G8', [hari_masuk])  
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
         worksheet.update('I8', [lokasi_kelas])  
-        time.sleep(1)  # Delay to respect quota
+        time.sleep(2)  # Delay to respect quota
 
         manfaat_start_row = 10
         if cpl_list:
             # Insert rows for CPL data
             if len(cpl_list) > 0:
                 worksheet.insert_rows([[None] * worksheet.col_count] * (len(cpl_list)-2), manfaat_start_row+1)  # Insert rows at the specified row
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Merge cells from C to J for each inserted row
             for i in range(len(cpl_list)):
                 worksheet.merge_cells(f'E{manfaat_start_row + i}:I{manfaat_start_row + i}')
-                time.sleep(1)  # Delay to respect quota
+                time.sleep(2)  # Delay to respect quota
             # Get CPL descriptions from data_cpl
             cpl_list_description = []
             for cpl_code in cpl_list:
@@ -677,11 +677,11 @@ else:
                         break
             # Write CPL descriptions to column C
             worksheet.update(f'E{manfaat_start_row }:E{manfaat_start_row  + len(cpl_list)-1}', [[item] for item in cpl_list_description])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             
             deskripsi_kontrak_row = manfaat_start_row +len(cpl_list)
             worksheet.update(f'E{deskripsi_kontrak_row}', [[deskripsi_matkul]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             tujuan_kontrak_row = deskripsi_kontrak_row +1
             # Get SubCPMK descriptions from data_subcpmk
@@ -695,19 +695,19 @@ else:
             tujuan_kontrak_description = "; ".join([item for item in subcpmk_list_description])
             # Write SubCPMK descriptions to column C
             worksheet.update(f'E{tujuan_kontrak_row}', [[tujuan_kontrak_description]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             materi_kontrak_row = tujuan_kontrak_row + 1
             materi_one_row = "\n".join([item for item in numbered_materi_tanpa_uts_uas])
             # Then update a single cell, e.g.:
             worksheet.update(f'E{materi_kontrak_row}', [[materi_one_row]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             referensi_kontrak_row = materi_kontrak_row + 2
             referensi_one_row = "\n".join([item for item in numbered_pustaka])
             # Then update a single cell, e.g.:
             worksheet.update(f'E{referensi_kontrak_row}', [[referensi_one_row]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             #Tanggal
             date_row = referensi_kontrak_row + 8
@@ -771,48 +771,48 @@ else:
             penugasan = PENUGASAN_MAP[code]
             sheet_input.duplicate_sheet(template_ws.id, new_sheet_name=new_name)
             ws = sheet_input.worksheet(new_name)
-            time.sleep(1)
+            time.sleep(2)
 
             # Isi header
-            ws.update('K3', [[data['KODE DOKUMEN RUBRIK']]]); time.sleep(1)
-            ws.update('C5', [[data['MATA KULIAH']]]);         time.sleep(1)
-            ws.update('C6', [[data['KODE MK']]]);             time.sleep(1)
-            ws.update('C7', [[data['SKS']]]);                 time.sleep(1)
-            ws.update('C8', [[data['SEMESTER']]]);            time.sleep(1)
-            ws.update('C9', [[dosen]]);                       time.sleep(1)
-            ws.update('C12', [[penugasan]]);                  time.sleep(1)
+            ws.update('K3', [[data['KODE DOKUMEN RUBRIK']]]); time.sleep(2)
+            ws.update('C5', [[data['MATA KULIAH']]]);         time.sleep(2)
+            ws.update('C6', [[data['KODE MK']]]);             time.sleep(2)
+            ws.update('C7', [[data['SKS']]]);                 time.sleep(2)
+            ws.update('C8', [[data['SEMESTER']]]);            time.sleep(2)
+            ws.update('C9', [[dosen]]);                       time.sleep(2)
+            ws.update('C12', [[penugasan]]);                  time.sleep(2)
 
             # Insert rows untuk Sub-CPMK
             if len(sub_lines_nondup) > 1:
                 ws.insert_rows([[None] * ws.col_count] * (len(sub_lines_nondup) - 1), START_SUB + 1)
-                time.sleep(1)
+                time.sleep(2)
 
             for i in range(len(sub_lines_nondup)):
                 ws.merge_cells(f'C{START_SUB+i}:D{START_SUB+i}')
-                time.sleep(1)
+                time.sleep(2)
                 ws.merge_cells(f'E{START_SUB+i}:L{START_SUB+i}')
-                time.sleep(1)
+                time.sleep(2)
 
             ws.update(f'C{START_SUB}:C{START_SUB + len(sub_lines_nondup) - 1}',
                     [[code] for code in sub_lines_nondup])
-            time.sleep(1)
+            time.sleep(2)
             ws.update(f'E{START_SUB}:E{START_SUB + len(sub_desc) - 1}',
                     [[desc] for desc in sub_desc])
-            time.sleep(1)
+            time.sleep(2)
 
             # Insert rows untuk CPL
             cpl_start = START_SUB + len(sub_lines_nondup) + 4
             if len(cpl_lines_nondup) > 1:
                 ws.insert_rows([[None] * ws.col_count] * (len(cpl_lines_nondup) - 1), cpl_start)
-                time.sleep(1)
+                time.sleep(2)
 
             for i in range(len(cpl_lines_nondup)):
                 ws.merge_cells(f'A{cpl_start+i}:C{cpl_start+i}')
-                time.sleep(1)
+                time.sleep(2)
                 ws.merge_cells(f'D{cpl_start+i}:J{cpl_start+i}')
-                time.sleep(1)
+                time.sleep(2)
                 ws.merge_cells(f'K{cpl_start+i}:L{cpl_start+i}')
-                time.sleep(1)
+                time.sleep(2)
 
             # Buat mapping SubCPMK → CPL (kebalikan)
             sub_set_label = set(sub_lines_nondup)          # Sub‑CPMK unik utk label ini
@@ -826,25 +826,41 @@ else:
             # Update ke sheet
             ws.update(f'A{cpl_start}:A{cpl_start + len(cpl_lines_nondup) - 1}',
                     [[code] for code in cpl_lines_nondup])
-            time.sleep(1)
+            time.sleep(2)
             ws.update(f'D{cpl_start}:D{cpl_start + len(cpl_desc) - 1}',
                     [[desc] for desc in cpl_desc])
-            time.sleep(1)
+            time.sleep(2)
             ws.update(f'K{cpl_start}:K{cpl_start + len(cpl_lines_nondup) - 1}',
                     [[", ".join(cpl_to_subs[cpl])] for cpl in cpl_lines_nondup])
-            time.sleep(1)
+            time.sleep(2)
             sheet_counter += 1
     
     def update_rpm_sheets(data, kriteria, dosen):
         kategori_keys = ["Tugas", "Kuis", "Evaluasi UTS", "Evaluasi UAS"]
         kategori_map  = {key: {"label": [], "row": []} for key in kategori_keys}
 
+        # Flag untuk melacak apakah UTS dan UAS sudah diisi
+        uts_added = False
+        uas_added = False
+
         for idx, item in enumerate(kriteria):
             for key in kategori_keys:
                 if key in item:
-                    kategori_map[key]["label"].append(item)
-                    kategori_map[key]["row"].append(idx)
-                    break   # sebuah kriteria hanya boleh masuk satu kategori
+                    # Batasi hanya satu kriteria untuk UTS dan UAS
+                    if key == "Evaluasi UTS" and not uts_added:
+                        kategori_map[key]["label"].append(item)
+                        kategori_map[key]["row"].append(idx)
+                        uts_added = True
+                        break
+                    elif key == "Evaluasi UAS" and not uas_added:
+                        kategori_map[key]["label"].append(item)
+                        kategori_map[key]["row"].append(idx)
+                        uas_added = True
+                        break
+                    elif key in ["Tugas", "Kuis"]:
+                        kategori_map[key]["label"].append(item)
+                        kategori_map[key]["row"].append(idx)
+                        break  # sebuah kriteria hanya boleh masuk satu kategori
 
         # ------------------ 2. Duplicated & isi sheet ----------------------
         sheet_counter = 1  # penomoran global RPM 1, 2, 3, ...
@@ -862,37 +878,37 @@ else:
                     new_sheet_name=new_name
                 )
                 worksheet = sheet_input.worksheet(new_name)
-                time.sleep(1)
+                time.sleep(2)
 
                 row_idx = rows[i]             # indeks sejajar ke list global
 
                 # b) ISIAN HEADER
                 worksheet.update('H3', [[data.get('KODE DOKUMEN RTM', '')]])
-                time.sleep(1)
+                time.sleep(2)
 
-                worksheet.update('C5', [[data['MATA KULIAH']]]);  time.sleep(1)
-                worksheet.update('C6', [[data['KODE MK']]]);      time.sleep(1)
-                worksheet.update('E6', [[data['SKS']]]);          time.sleep(1)
-                worksheet.update('G6', [[data['SEMESTER']]]);     time.sleep(1)
-                worksheet.update('C7', [[dosen]]);                time.sleep(1)
+                worksheet.update('C5', [[data['MATA KULIAH']]]);  time.sleep(2)
+                worksheet.update('C6', [[data['KODE MK']]]);      time.sleep(2)
+                worksheet.update('E6', [[data['SKS']]]);          time.sleep(2)
+                worksheet.update('G6', [[data['SEMESTER']]]);     time.sleep(2)
+                worksheet.update('C7', [[dosen]]);                time.sleep(2)
 
                 # c) ISIAN RUBRIK SPESIFIK
-                worksheet.update('A12', [[item]]);                                time.sleep(1)
-                worksheet.update('A14', [[subcpmk_mingguan_description[row_idx]]]);time.sleep(1)
-                worksheet.update('A17', [[numbered_indikator[row_idx]]]);          time.sleep(1)
-                worksheet.update('A25', [[f"Indikator: {numbered_indikator[row_idx]}"]]); time.sleep(1)
-                worksheet.update('A27', [[f"Bobot Penilaian : {bobot[row_idx]} % dari total 100% penilaian mata kuliah"]]); time.sleep(1)
-                worksheet.update('A30', [[f"Minggu ke-{minggu_ke[row_idx]}"]]);    time.sleep(1)
+                worksheet.update('A12', [[item]]);                                time.sleep(2)
+                worksheet.update('A14', [[subcpmk_mingguan_description[row_idx]]]);time.sleep(2)
+                worksheet.update('A17', [[numbered_indikator[row_idx]]]);          time.sleep(2)
+                worksheet.update('A25', [[f"Indikator: {numbered_indikator[row_idx]}"]]); time.sleep(2)
+                worksheet.update('A27', [[f"Bobot Penilaian : {bobot[row_idx]} % dari total 100% penilaian mata kuliah"]]); time.sleep(2)
+                worksheet.update('A30', [[f"Minggu ke-{minggu_ke[row_idx]}"]]);    time.sleep(2)
 
                 # d) ISIAN PUSTAKA (jika ada)
                 if numbered_pustaka:
                     worksheet.insert_rows([[None]*worksheet.col_count]*len(numbered_pustaka), 35)
-                    time.sleep(1)
+                    time.sleep(2)
                     for p in range(len(numbered_pustaka)+1):
                         worksheet.merge_cells(f'A{34+p}:H{34+p}')
                     worksheet.update(f'A34:A{34+len(numbered_pustaka)-1}',
                                     [[ref] for ref in numbered_pustaka])
-                    time.sleep(1)
+                    time.sleep(2)
 
                 sheet_counter += 1  # naikkan nomor RPM berikutnya
 
@@ -904,49 +920,49 @@ else:
         for i in range(len(kriteria_tugas)) :
             new_rubrik_worksheet = sheet_input.duplicate_sheet(temp_rtm_in.id, new_sheet_name=f"RPM {i+1}")
             worksheet = sheet_input.worksheet(f"RTM {i+1}")
-            time.sleep(1)
+            time.sleep(2)
 
             worksheet.update('H3', [[data['KODE DOKUMEN RTM'] or '']])
-            time.sleep(1)
+            time.sleep(2)
 
             # Update basic course data 
             worksheet.update('C5', [[data['MATA KULIAH']]])
-            time.sleep(1)  # Delay to respect quota      
+            time.sleep(2)  # Delay to respect quota      
             worksheet.update('C6', [[data['KODE MK']]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             worksheet.update('E6', [[data['SKS']]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
             worksheet.update('G6', [[data['SEMESTER']]])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('C7', [[dosen]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('A12', [[kriteria_tugas[i]]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('A14', [[subcpmk_mingguan_description[row_tugas[i]]]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('A17', [[numbered_indikator[row_tugas[i]]]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('A25', [["Indikator: " + numbered_indikator[row_tugas[i]]]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('A27', [[f"Bobot Penilaian : {bobot[row_tugas[i]]} % dari total 100% penilaian mata kuliah"]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
             worksheet.update('A30', [["Minggu ke-" + minggu_ke[row_tugas[i]]]])  
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
                             
             if len(numbered_pustaka) > 0:
                 worksheet.insert_rows([[None] * worksheet.col_count] * len(numbered_pustaka), 35)
-                time.sleep(1)
+                time.sleep(2)
             for pustaka_row in range(len(numbered_pustaka)+1):
                 worksheet.merge_cells(f'A{34 + pustaka_row}:H{34 + pustaka_row}')
             worksheet.update(f'A{34}:A{34 + len(numbered_pustaka) - 1}', [[item] for item in numbered_pustaka])
-            time.sleep(1)  # Delay to respect quota
+            time.sleep(2)  # Delay to respect quota
 
     def update_porto_sheet(cpl_list, cpl_set, cpmk_set, subcpmk_set):
 
@@ -954,12 +970,12 @@ else:
         # Duplicate Template RPS and rename to RPS
         new_porto_worksheet = sheet_input.duplicate_sheet(temp_porto_in.id, new_sheet_name="PORTOFOLIO PENILAIAN")
         worksheet = sheet_input.worksheet("PORTOFOLIO PENILAIAN")
-        time.sleep(1)
+        time.sleep(2)
 
         if bobot:
             # Insert empty rows if needed
             worksheet.insert_rows([[None] * worksheet.col_count] * (len(bobot) - 2), 3)
-            time.sleep(1)
+            time.sleep(2)
 
         # Prepare data
         bentuk_penilaian = [item.split(":")[0].strip() for item in numbered_kriteria]
@@ -993,28 +1009,28 @@ else:
 
         # Write sorted data to worksheet
         worksheet.update(f'A2:A{len(bobot) + 1}', [[item] for item in cpl_sorted])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'B2:B{len(bobot) + 1}', [[item] for item in cpmk_sorted])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'C2:C{len(bobot) + 1}', [[item] for item in subcpmk_sorted])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'D2:D{len(bobot) + 1}', [[item] for item in indikator_sorted])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'E2:E{len(bobot) + 1}', [[item] for item in bentuk_sorted])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'F2:F{len(bobot) + 1}', [[item] for item in bobot_sorted])
-        time.sleep(1)
+        time.sleep(2)
 
         for i in range(len(bobot)):
             worksheet.update(f'H{i + 2}', [[80]])
-            time.sleep(1)
+            time.sleep(2)
             worksheet.update(f'I{i + 2}', [[f"=H{i + 2}*F{i + 2}"]], value_input_option='USER_ENTERED')
-            time.sleep(1)
+            time.sleep(2)
 
         for cpl_name in cpl_list:
             matching_rows = [i for i, val in enumerate(cpl_sorted) if val == cpl_name]
@@ -1024,9 +1040,9 @@ else:
                 sum_formula = f'=SUM(F{row_start}:F{row_end})'
                 percent_formula = f'=SUM(I{row_start}:I{row_end})/I{len(bobot)+2}'
                 worksheet.update(f'G{row_start}', [[sum_formula]], value_input_option='USER_ENTERED')
-                time.sleep(1)
+                time.sleep(2)
                 worksheet.update(f'J{row_start}', [[percent_formula]], value_input_option='USER_ENTERED')
-                time.sleep(1)
+                time.sleep(2)
 
     def col_index_to_letter(n):
         """Convert column index (1-based) to letter (e.g., 4 -> D)."""
@@ -1041,22 +1057,22 @@ else:
         sheet_name = f"NILAI {(data['MATA KULIAH']).upper()} - TA: {tahun_ajaran[0]}"
         new_porto_worksheet = sheet_input.duplicate_sheet(temp_nilai_in.id, new_sheet_name= sheet_name)
         worksheet = sheet_input.worksheet(sheet_name)
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'C3', [[f": {data['MATA KULIAH']}"]])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'C4', [[f": {data['KODE MK']}"]])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'C5', [[f": {kelas[0]}"]])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'C6', [[f": {tahun_ajaran[0]}"]])
-        time.sleep(1)
+        time.sleep(2)
 
         worksheet.update(f'C7', [[f": {dosen}"]])
-        time.sleep(1)
+        time.sleep(2)
 
         start_col = 4  # Kolom D = 4 (1-based indexing)
         row = 13       # Header row to write labels
@@ -1073,7 +1089,7 @@ else:
 
         # Sisipkan kolom kosong dari kolom D (1-based)
         worksheet.insert_cols([[None]] * total_cols_to_insert, start_col)
-        time.sleep(1)
+        time.sleep(2)
 
         # Tulis header setelah menyisipkan
         current_col = start_col
@@ -1088,26 +1104,26 @@ else:
                 col_number = current_col + j
                 col_letter = col_index_to_letter(col_number)
                 worksheet.update(f"{col_letter}{row}", [[header]])
-                time.sleep(1)
+                time.sleep(2)
                 if col_number < current_col + 3:
                     worksheet.merge_cells(f"{col_letter}{row}:{col_letter}{row+1}")
-                    time.sleep(1)
+                    time.sleep(2)
             col_letter_cpmk = col_index_to_letter(current_col)
             end_col_bentuk = col_index_to_letter(current_col+3)
             col_letter_bobot = col_index_to_letter(current_col+3)
             worksheet.update(f"{col_letter_cpmk}{row-4}", [[cpl_value]])
-            time.sleep(1)
+            time.sleep(2)
             worksheet.update(f"{col_letter_cpmk}{row-3}", [[cpmk_nilai[idx]]])
-            time.sleep(1)
+            time.sleep(2)
             worksheet.update(f"{col_letter_cpmk}{row-2}", [[subcpmk_nilai[idx]]])
-            time.sleep(1)
+            time.sleep(2)
             worksheet.update(f"{col_letter_cpmk}{row-1}", [[bentuk_nilai[idx]]])
-            time.sleep(1)
+            time.sleep(2)
             worksheet.update(f"{col_letter_bobot}{row+1}", [[bobot_nilai[idx]]])
-            time.sleep(1)
+            time.sleep(2)
 
             worksheet.merge_cells(f"{col_letter_cpmk}{row-1}:{end_col_bentuk}{row-1}")
-            time.sleep(1)
+            time.sleep(2)
 
             current_col += 4  # Lanjut ke blok berikutnya
         
@@ -1121,7 +1137,7 @@ else:
             # Baris untuk CPL (row-4)
             merge_range = f"{start_letter}{row-4}:{end_letter}{row-4}"
             worksheet.merge_cells(merge_range)
-            time.sleep(1)
+            time.sleep(2)
 
             merge_cpl_start_col = merge_end_col + 1  # Geser untuk CPL berikutnya
 
@@ -1135,7 +1151,7 @@ else:
             # Baris untuk CPL (row-4)
             merge_range = f"{start_letter}{row-3}:{end_letter}{row-3}"
             worksheet.merge_cells(merge_range)
-            time.sleep(1)
+            time.sleep(2)
 
             merge_cpmk_start_col = merge_end_col + 1  # Geser untuk CPL berikutnya
         
@@ -1149,7 +1165,7 @@ else:
             # Baris untuk CPL (row-4)
             merge_range = f"{start_letter}{row-2}:{end_letter}{row-2}"
             worksheet.merge_cells(merge_range)
-            time.sleep(1)
+            time.sleep(2)
 
             merge_subcpmk_start_col = merge_end_col + 1  # Geser untuk CPL berikutnya
 
@@ -1166,12 +1182,12 @@ else:
             # Kolom 3 = SUM(kolom1:kolom2)
             sum_formula = f"=SUM({col_1}{formula_row}:{col_2}{formula_row})"
             worksheet.update(f"{col_3}{formula_row}", [[sum_formula]], value_input_option='USER_ENTERED')
-            time.sleep(1)
+            time.sleep(2)
 
             # Kolom 4 = kolom3 * kolom4_di_baris14
             mult_formula = f"={col_3}{formula_row}*${col_4}${bobot_row}"
             worksheet.update(f"{col_4}{formula_row}", [[mult_formula]], value_input_option='USER_ENTERED')
-            time.sleep(1)
+            time.sleep(2)
 
             current_col += 4
         
@@ -1185,7 +1201,7 @@ else:
 
             # Sisipkan satu kolom kosong setelah blok CPL
             worksheet.insert_cols([[None]], insert_col_idx)
-            time.sleep(1)
+            time.sleep(2)
 
             # Hitung kolom-kolom SUB BOBOT untuk CPL ini (kolom ke-4 dari setiap 4 kolom)
             sub_bobot_cols = [
@@ -1202,14 +1218,14 @@ else:
             # 1. Header: merge row 10:14, tulis 'NILAI PER CPL'
             merge_range = f"{insert_letter}{start_merge_row}:{insert_letter}{end_merge_row}"
             worksheet.merge_cells(merge_range)
-            time.sleep(1)
+            time.sleep(2)
             worksheet.update(f"{insert_letter}{start_merge_row}", [["NILAI PER CPL"]])
-            time.sleep(1)
+            time.sleep(2)
 
             # 2. Formula: jumlahkan semua SUB BOBOT CPL ini di baris 15
             sum_formula = f"=SUM({','.join([col + str(formula_row) for col in sub_bobot_cols])})"
             worksheet.update(f"{insert_letter}{formula_row}", [[sum_formula]], value_input_option='USER_ENTERED')
-            time.sleep(1)
+            time.sleep(2)
 
             nilai_per_cpl_letter.append(insert_letter)
 
@@ -1225,7 +1241,7 @@ else:
             # Bangun formula penjumlahan
             final_sum_formula = f"=SUM({','.join([col + str(row + 2) for col in nilai_per_cpl_letter])})"
             worksheet.update(f"{result_col_letter}{row + 2}", [[final_sum_formula]], value_input_option='USER_ENTERED')
-            time.sleep(1)        
+            time.sleep(2)        
 
             ketercapaian_col_start = total_col_index + 5
 
@@ -1236,7 +1252,7 @@ else:
 
             # Update kolom KETERANGAN CPL
             worksheet.update(f'{col_ket_letter}15:{col_ket_letter}{15 + len(cpl_list) - 1}', [[item] for item in cpl_list])
-            time.sleep(1)
+            time.sleep(2)
 
             threshold_cpl = []
 
@@ -1256,20 +1272,19 @@ else:
                 f'{col_thresh_letter}15:{col_thresh_letter}{15 + len(threshold_cpl) - 1}',
                 [[item] for item in threshold_cpl]
             )
-            time.sleep(1)
+            time.sleep(2)
 
             # Update kolom AVERAGE
             for i, letter in enumerate(nilai_per_cpl_letter):
                 average_formula = f"=AVERAGE({letter}15:{letter}17)"
                 worksheet.update(f"{col_avg_letter}{15 + i}", [[average_formula]], value_input_option='USER_ENTERED')
-                time.sleep(1)
+                time.sleep(2)
 
 
     # Call the update function
     update_rps_sheet(matkul_data, cpl_list, cpmk_list, subcpmk_list, selected_dosen)
     update_kontrak_sheet(matkul_data, cpl_list, subcpmk_list, selected_dosen)
     update_rubrik_sheet(matkul_data, numbered_kriteria, subcpmk_set, cpl_set, selected_dosen)
-    # update_rtm_sheet(matkul_data, numbered_kriteria, selected_dosen)
     update_rpm_sheets(matkul_data, numbered_kriteria, selected_dosen)
     update_porto_sheet(cpl_list, cpl_set, cpmk_set, subcpmk_set)
     update_nilai_sheet(matkul_data, selected_dosen, cpl_list, cpmk_list, subcpmk_list, cpl_sorted, cpmk_sorted, subcpmk_sorted, bentuk_sorted, bobot_sorted)
