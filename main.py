@@ -16,9 +16,6 @@ try:
 except locale.Error:
     print("Locale 'id_ID.UTF-8' not available. Using default.")
 
-# Set locale to Indonesian
-locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
-
 # Define the scopes
 scopes = [
     "https://www.googleapis.com/auth/spreadsheets",
