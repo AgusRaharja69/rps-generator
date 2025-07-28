@@ -16,9 +16,6 @@ try:
 except locale.Error:
     print("Locale 'id_ID.UTF-8' not available. Using default.")
 
-# Set locale to Indonesian
-locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
-
 # Define the scopes
 scopes = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -82,7 +79,6 @@ data_cpl = list_cpl.get_all_values()
 data_cpmk = list_cpmk.get_all_values()
 data_subcpmk = list_subcpmk.get_all_values()
 
-print(data_dosen)
 # Extract dosen names for selection
 dosen_options = [row[0] for row in data_dosen[1:]]  # Skip header, take first column
 print("Pilih nama dosen dari daftar berikut:")
@@ -236,7 +232,7 @@ else:
             time.sleep(2)  # Delay to respect quota
 
         # Update CPMK with looping (start 4 rows after CPL)
-        cpmk_start_row = cpl_start_row + len(cpmk_list) + 1
+        cpmk_start_row = cpl_start_row + len(cpmk_list) + 2
         if cpmk_list:
             # Insert rows for CPMK data
             if len(cpmk_list) > 0:
